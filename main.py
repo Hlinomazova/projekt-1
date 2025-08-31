@@ -50,7 +50,7 @@ TEXTS = [
 if username in users and users[username] == password:
     print("----------------------------------------")
     print(f"Welcome to the app, {username}")
-    print("We have 3 texts to be analyzed.")
+    print(f"We have {len(TEXTS)} texts to be analyzed.")
     print("----------------------------------------")
 else:
     print("----------------------------------------")
@@ -58,15 +58,11 @@ else:
     print("----------------------------------------")
     exit()
 
-# Výběr textu
-choice = int(input("Enter a number between 1 and 3 to select: "))
+# Výběr textu (rozsah dle počtu textů)
+choice = int(input(f"Enter a number between 1 and {len(TEXTS)} to select: "))
 
-if choice == 1:
-    selected_text = TEXTS[0]
-elif choice == 2:
-    selected_text = TEXTS[1]
-elif choice == 3:
-    selected_text = TEXTS[2]
+if 1 <= choice <= len(TEXTS):
+    selected_text = TEXTS[choice - 1]
 else:
     print("----------------------------------------")
     print("Invalid choice. Terminating the program.")
@@ -78,55 +74,41 @@ words = selected_text.split()
 
 # Počet slov v textu 
 word_count = len(words)
-
 print(f"There are {word_count} words in the selected text.")
 
 # Počet slov začínajících velkým písmenem
 titlecase_count = 0
-
 for word in words:
     if word.istitle():
         titlecase_count += 1
-
 print(f"There are {titlecase_count} titlecase words.")
 
 # Počet slov psaných velkými písmeny 
-
 uppercase_count = 0
-
 for word in words:
     if word.isupper():
         uppercase_count += 1
-
 print(f"There are {uppercase_count} uppercase words.")       
 
 # Počet slov psaných malými písmeny
-
 lowercase_count = 0
-
 for word in words:
     if word.islower():
         lowercase_count += 1
-
 print(f"There are {lowercase_count} lowercase words.")   
 
 # Počet a suma čísel 
-
 number_count = 0
 number_sum = 0
-
 for word in words:
     if word.isdigit():
-        number_count +=1
+        number_count += 1
         number_sum = number_sum + int(word)
-
 print(f"There are {number_count} numeric strings.")
 print(f"The sum of all numbers is {number_sum}.")
 
 # Sloupcový graf 
-
 lengths = {}
-
 for word in words:
     word = word.strip(".,!?")
     length = len(word)
@@ -139,7 +121,10 @@ print("----------------------------------------")
 print("LEN| OCCURRENCES |NR.")
 print("----------------------------------------")
 
-for length in sorted(lengths):
-    count = lengths[length]
-    stars = "*" * count
-    print(f"{length:>3}|{stars:<13}|{count}")
+if lengths:
+    max_count = max(lengths.values())
+    len_col_width = len(str(max(lengths)))
+    for length in sorted(lengths):
+        count = lengths[length]
+        stars = "*" * count
+        print(f"{length:>{len_col_width}}|{stars:<{max_count}}|{count}")
